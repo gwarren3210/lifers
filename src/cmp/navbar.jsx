@@ -1,3 +1,4 @@
+'use client';
 const NavItem = ({title, classProps }) => {
    return (
       <li className={`mx-4 cursor-pointer ${classProps}`}>{title}</li>
@@ -16,6 +17,13 @@ export default function Navbar(props) {
             ))}
             <li className='text-white bg-[#52796f] py-2 px-7 mx-4 rounded-full cursor-pointer hover:bg-[#84a98c]'>
                Button
+            </li>
+            <li className='w-10 h-10 rounded-full overflow-hidden'>
+               <img 
+                  src={'https://via.placeholder.com/24'} 
+                  className='cursor-pointer object-cover w-full h-full'
+                  onClick={() => props.toggleFunc('profile')}
+               />
             </li>
          </ul>
       </nav>

@@ -1,9 +1,12 @@
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
-import people from '../data/people.json'
+
 export default function LifersTable(props) {
    return (
-      <div className='shadow-lg xl:w-3/4'>
-         <TableContainer component={Paper}>
+      <div className='xl:w-3/4'>
+         <button onClick={()=> props.toggleFunc('')} className='text-white bg-[#52796f] py-2 px-7 mx-4 rounded-full mb-5 hover:bg-[#84a98c]'>
+            Back
+         </button>
+         <TableContainer component={Paper} className='shadow-lg '>
          <Table>
             <TableHead>
                <TableRow>
@@ -14,7 +17,7 @@ export default function LifersTable(props) {
                </TableRow>
             </TableHead>
             <TableBody>
-               {people.map((person, key) => (
+               {props.people.map((person, key) => (
                   <TableRow key={key}>
                      <TableCell>{person.name}</TableCell>
                      <TableCell>{person.age}</TableCell>

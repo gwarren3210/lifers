@@ -1,8 +1,8 @@
-[
-   {
+{
+   "highschool": {
       "name": "High School",
+      "id": "highschool",
       "description": "Group1",
-      "link": "/highschool",
       "people": [
          "johndoe",
          "janesmith",
@@ -14,59 +14,46 @@
          "sophiamartinez"
       ]
    },
-   {
+   "middleschool": {
       "name": "Middle School",
-      "link": "/highschool",
+      "id": "middleschool",
+      "people": ["johndoe"],
       "description": "Group1"
    },
-   {
+   "elementaryschool": {
       "name": "Elementary School",
-      "link": "/highschool",
+      "id": "elementaryschool",
+      "people": ["janesmith"],
       "description": "Group1"
    },
-   {
+   "college": {
       "name": "College",
-      "link": "/highschool",
+      "id": "college",
+      "people": ["michaelj"],
       "description": "Group1"
    },
-   {
+   "work": {
       "name": "Work",
-      "link": "/highschool",
+      "id": "work",
+      "people": ["emilyd"],
       "description": "Group1"
    },
-   {
+   "family": {
       "name": "Family",
-      "link": "/highschool",
+      "id": "family",
+      "people": ["robertbrown"],
       "description": "Group1"
    },
-   {
+   "closefriends": {
       "name": "Close Friends",
-      "link": "/highschool",
+      "id": "closefriends",
+      "people": ["oliviaw"],
       "description": "Group1"
    },
-   {
-      "name": "Elementary School",
-      "link": "/highschool",
-      "description": "Group1"
-   },
-   {
-      "name": "College",
-      "link": "/highschool",
-      "description": "Group1"
-   },
-   {
-      "name": "Work",
-      "link": "/highschool",
-      "description": "Group1"
-   },
-   {
-      "name": "Family",
-      "link": "/highschool",
-      "description": "Group1"
-   },
-   {
-      "name": "Close Friends",
-      "link": "/highschool",
+   "": {
+      "name": "Example Group",
+      "id": "",
+      "people": ["davidthompson"],
       "description": "Group1"
    }
-]
+}
