@@ -1,50 +1,72 @@
 [
    {
       "name": "High School",
-      "description": "Group1"
+      "description": "Group1",
+      "link": "/highschool",
+      "people": [
+         "johndoe",
+         "janesmith",
+         "michaelj",
+         "emilyd",
+         "robertbrown",
+         "oliviaw",
+         "davidthompson",
+         "sophiamartinez"
+      ]
    },
    {
       "name": "Middle School",
+      "link": "/highschool",
       "description": "Group1"
    },
    {
       "name": "Elementary School",
+      "link": "/highschool",
       "description": "Group1"
    },
    {
       "name": "College",
+      "link": "/highschool",
       "description": "Group1"
    },
    {
       "name": "Work",
+      "link": "/highschool",
       "description": "Group1"
    },
    {
       "name": "Family",
+      "link": "/highschool",
       "description": "Group1"
    },
    {
       "name": "Close Friends",
+      "link": "/highschool",
       "description": "Group1"
    },
    {
       "name": "Elementary School",
+      "link": "/highschool",
       "description": "Group1"
    },
    {
       "name": "College",
+      "link": "/highschool",
       "description": "Group1"
    },
    {
       "name": "Work",
+      "link": "/highschool",
       "description": "Group1"
    },
    {
       "name": "Family",
+      "link": "/highschool",
       "description": "Group1"
    },
    {
       "name": "Close Friends",
+      "link": "/highschool",
       "description": "Group1"
    }
 ]

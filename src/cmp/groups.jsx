@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShare, faBell } from '@fortawesome/free-solid-svg-icons';
 import groups from '../data/groups.json'
 import Switch from '@mui/material/Switch';
+import Link from 'next/link';
 
 const CustomSwitch = (props) => {
    return (
@@ -13,8 +14,10 @@ const CustomSwitch = (props) => {
    );
 };
 
-const handleClick = () => console.log("Clicked");
-   
+const handleClick = (props) => {
+   const router = useRouter();
+   router.push('/groups/[id]', '/groups/1')
+};
 
 const groupCard = ( group, index ) => {
    return (
@@ -22,9 +25,9 @@ const groupCard = ( group, index ) => {
             <img className="w-full h-64 object-cover" src={"https://via.placeholder.com/150"} alt={group.name} />
             <div className="bg-white px-6 py-4 flex flex-row justify-between">
                <div >
-                  <button className="font-bold text-xl mb-2 hover:text-[#52796f]" onClick={handleClick}>
+                  <Link href={'/about'} className="font-bold text-xl mb-2 hover:text-[#52796f]" >
                      {group.name}
-                  </button>
+                  </Link>
                   <p className="text-gray-700 text-base">
                      {group.description}
                   </p>
