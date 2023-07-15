@@ -6,7 +6,7 @@ const NavItem = ({title, classProps }) => {
 
 export default function Navbar(props) {
    return (
-      <nav className='z-99 w-full flex md:justify-center justify-between items-center p-4 shadow-lg fixed top-0 '>
+      <nav className='bg-white z-10 w-full flex md:justify-center justify-between items-center p-4 shadow-lg fixed top-0 '>
          <div className='md:flex-[0.5] flex-initial justify-center items-center'>
             <img src={'logo'} alt='logo' className='w-32 cursor-pointer' />
          </div>

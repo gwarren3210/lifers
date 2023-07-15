@@ -2,7 +2,7 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper
 import people from '../data/people.json'
 export default function LifersTable(props) {
    return (
-      <div>
+      <div className='shadow-lg xl:w-3/4'>
          <TableContainer component={Paper}>
          <Table>
             <TableHead>
