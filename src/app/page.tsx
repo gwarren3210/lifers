@@ -6,16 +6,6 @@ import Navbar from '../cmp/navbar'
 import people from '../data/people.json'
 import groups from '../data/groups.json'
 
-function renderTableComponent(table: string, toggleTable: (t: string) => void, groups: any, tablePeople: any) {
-  switch (table) {
-    case '':
-      return <Groups toggleFunc={toggleTable} groups={groups} />;
-    case 'profile':
-      return <Profile />;
-    default:
-      return <LifersTable toggleFunc={toggleTable} people={tablePeople} />;
-  }
-}
 
 
 export default function Home() {
@@ -26,17 +16,15 @@ export default function Home() {
     console.log('isTable', table === hs);
   }, [table]);
   let tablePeople = people.filter(p => groups[table as keyof typeof groups].people.includes(p.username));
-  const tableComponent = renderTableComponent(table, toggleTable, groups, tablePeople);
 
   return (
     <div>
-      <Navbar />
+      <Navbar key='home' toggleFunc={toggleTable}/>
       <main className="flex min-h-screen flex-col items-center p-24">
-        {/* table !== '' 
+        {table !== '' 
         ? <LifersTable toggleFunc={toggleTable} people={tablePeople} /> 
         : <Groups toggleFunc={toggleTable} groups={groups} />
-         */}
-        {tableComponent}
+        }
       </main>
     </div>
   )

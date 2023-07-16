@@ -1,4 +1,5 @@
 'use client';
+import Link from "next/link";
 const NavItem = ({title, classProps }) => {
    return (
       <li className={`mx-4 cursor-pointer ${classProps}`}>{title}</li>
@@ -12,18 +13,18 @@ export default function Navbar(props) {
             <img src={'logo'} alt='logo' className='w-32 cursor-pointer' />
          </div>
          <ul className='text-black md:flex hidden list-none flex-row justify-between items-center flex-initial'>
-            {['Nav1', 'Nav2', 'Nav3', 'Nav4'].map((item, index) => (
-               <NavItem title={item} key={item + index} classProps='hover:text-[#52796f]'/>
+            {['Home', 'Nav2', 'Nav3', 'Nav4'].map((item, index) => (
+               <Link href='/'>
+                  <NavItem onClick={()=>props.toggleFunc('')} title={item} key={item + index} classProps='hover:text-[#52796f]'/>
+               </Link>
             ))}
-            <li className='text-white bg-[#52796f] py-2 px-7 mx-4 rounded-full cursor-pointer hover:bg-[#84a98c]'>
-               Button
-            </li>
             <li className='w-10 h-10 rounded-full overflow-hidden'>
-               <img 
-                  src={'https://via.placeholder.com/24'} 
-                  className='cursor-pointer object-cover w-full h-full'
-                  onClick={() => props.toggleFunc('profile')}
-               />
+               <Link href='/profile'>
+                  <img 
+                     src={'https://via.placeholder.com/24'} 
+                     className='cursor-pointer object-cover w-full h-full'
+                  />
+               </Link>
             </li>
          </ul>
       </nav>
