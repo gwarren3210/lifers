@@ -6,6 +6,7 @@ import Switch from '@mui/material/Switch';
 import Link from 'next/link';
 import FormDialog from '@/cmp/newGroupDialog';
 import groupsData from '@/data/groups.json';
+import { getGroups } from '@/server/groups';
 
 const CustomSwitch = (props) => {
    return (
@@ -40,9 +41,6 @@ const groupCard = ( group, index, func ) => {
 
 export default function Groups(props) {
    const [groups, setGroups] = useState(groupsData);
-   useEffect(() => {
-      console.log('groups', groups);
-   }, [groups]);
    return (
       <div className='p-4'>
          <div className='flex flex-row justify-end mx-20'>

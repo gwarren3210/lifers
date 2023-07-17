@@ -21,10 +21,6 @@ const theme = createTheme({
 export default function Home() {
   const [table, setTable] = useState<string>('');
   const toggleTable = (t: string) => setTable(t);
-  const hs = 'highschool'
-  useEffect(() => {
-    console.log('isTable', table === hs);
-  }, [table]);
   let tablePeople = people.filter(p => groups[table as keyof typeof groups].people.includes(p.username));
 
   return (

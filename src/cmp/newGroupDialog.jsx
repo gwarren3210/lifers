@@ -7,7 +7,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
-import createGroup from '@/server/createGroup';
+import { createGroup } from '@/server/groups';
 
 export default function FormDialog(props) {
    const [open, setOpen] = useState(false);
@@ -23,7 +23,6 @@ export default function FormDialog(props) {
    const handleCreate = async () => {
       setIsCreating(true);
       const g = await createGroup(name, description);
-      console.log(g.ok);
       console.log('g', g);
       setIsCreating(false)
       props.setGroups(g);
