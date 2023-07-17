@@ -1,8 +1,11 @@
 'use client';
+import { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faShare, faBell } from '@fortawesome/free-solid-svg-icons';
+import { faShare, faBell, faPlus  } from '@fortawesome/free-solid-svg-icons';
 import Switch from '@mui/material/Switch';
 import Link from 'next/link';
+import FormDialog from '@/cmp/newGroupDialog';
+import groupsData from '@/data/groups.json';
 
 const CustomSwitch = (props) => {
    return (
@@ -35,15 +38,21 @@ const groupCard = ( group, index, func ) => {
    );
 };
 
-
 export default function Groups(props) {
+   const [groups, setGroups] = useState(groupsData);
+   useEffect(() => {
+      console.log('groups', groups);
+   }, [groups]);
    return (
-      <div>
-         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 p-4">
-            {
-               [ "highschool",  "middleschool",  "elementaryschool",  "college",  "work",  "family",  "closefriends"]
-               .map((item, index) => groupCard(props.groups[item], index, props.toggleFunc))
-            }
+      <div className='p-4'>
+         <div className='flex flex-row justify-end mx-20'>
+            <FormDialog setGroups={setGroups}/> 
+         </div>
+         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {Object.keys(groups).map((group, index) => {
+               if (group === '') return
+               return groupCard(groups[group], index, props.toggleFunc)
+            })}
          </div>
       </div>
    );
