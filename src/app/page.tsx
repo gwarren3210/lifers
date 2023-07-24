@@ -4,8 +4,10 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import LifersTable from '../cmp/table'
 import Groups from '../cmp/groups'
 import Navbar from '../cmp/navbar'
+import LandingPage from '../cmp/landingPage'
 import people from '../data/people.json'
 import groups from '../data/groups.json'
+import { getGroups } from '@/server/groups';
 
 const theme = createTheme({
   palette: {
@@ -19,19 +21,19 @@ const theme = createTheme({
 });
 
 export default function Home() {
-  const [table, setTable] = useState<string>('');
-  const toggleTable = (t: string) => setTable(t);
-  let tablePeople = people.filter(p => groups[table as keyof typeof groups].people.includes(p.username));
-
+  const [table, setTable] = useState<number>(-1);
+  const toggleTable = (t: number) => setTable(t);
+  const [tablePeople, setTablePeople] = useState<any[]>([]);
   return (
     <div>
       <ThemeProvider theme={theme}>
         <Navbar key='home' toggleFunc={toggleTable}/>
         <main className="flex min-h-screen flex-col items-center p-24">
-          {table !== '' 
+          {/* table !== -1
           ? <LifersTable toggleFunc={toggleTable} people={tablePeople} /> 
           : <Groups toggleFunc={toggleTable} groups={groups} />
-          }
+           */}
+           <LandingPage />
         </main>
       </ThemeProvider>
     </div>

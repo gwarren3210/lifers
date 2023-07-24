@@ -41,6 +41,11 @@ const groupCard = ( group, index, func ) => {
 
 export default function Groups(props) {
    const [groups, setGroups] = useState(groupsData);
+   useEffect(async () => {
+      const g = await getGroups();
+      console.log('g', g);
+      setGroups(g);
+   }, []);
    return (
       <div className='p-4'>
          <div className='flex flex-row justify-end mx-20'>

@@ -1,21 +1,35 @@
 import g from '../data/groups.json';
-import { createClient } from '@supabase/supabase-js'
-
-const supabaseUrl = 'https://esrodeumkeukhwzrmftd.supabase.co'
-//const supabaseKey = process.env.SUPABASE_KEY
-//const supabase = createClient(supabaseUrl, supabaseKey)
+import supabase from '../../supabase';
 
 let groups = {...g};
+let idNum = 0;
 
 export async function createGroup(name, description) {
-   const newGroup = {
-      name,
-      "id": "s",
-      "people": ["davidthompson"],
-      description
+   const { data, error } = await supabase
+      .from('Groups').insert([
+         { 
+            name,
+            description,
+            members: ["davidthompson"]
+         },
+      ])
+      .select()
+   console.log("createGroup data: ", data)
+   console.log("createGroup error: ", error)
+   return getGroups();
+}
+
+export async function getGroups() {
+   let dGroups = null;
+   try {
+      const { data, error } = await supabase
+      .from('Groups')
+      .select('*')
+      dGroups = data;
+      idNum = dGroups.length;
+   } catch (error) {
+      console.log("getGroups error: ", error)
+   } finally {
+      return dGroups;
    }
-   let newGroups = {...groups}
-   newGroups[name] = newGroup;
-   groups = newGroups;
-   return newGroups;
 }
