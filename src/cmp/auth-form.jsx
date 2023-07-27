@@ -13,6 +13,10 @@ export default function AuthForm() {
       appearance={{ theme: ThemeSupa }}
       showLinks={false}
       providers={[]}
+      queryParams={{
+        access_type: 'offline',
+        prompt: 'consent',
+      }}
       localization={{
         variables: {
           sign_in : {

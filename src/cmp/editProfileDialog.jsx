@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -57,9 +57,10 @@ export default function ProfileDialog(props) {
                   onChange={(e) => setUsername(e.target.value)}
                />
                <TextField
+                  value={firstName}
                   autoFocus
                   margin="dense"
-                  id="last-name"
+                  id="first-name"
                   label="First Name"
                   fullWidth
                   required
@@ -69,7 +70,7 @@ export default function ProfileDialog(props) {
                <TextField
                   autoFocus
                   margin="dense"
-                  id="name"
+                  id="last-name"
                   label="Last Name"
                   fullWidth
                   required

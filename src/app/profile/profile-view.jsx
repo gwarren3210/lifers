@@ -7,6 +7,7 @@ import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import ProfileCard from '../../cmp/profileCard';
 import infoCard from '../../cmp/infoCard';
 import { useCallback, useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import InfoCard from '../../cmp/infoCard';
 import ProfileDialog from '../../cmp/editProfileDialog';
@@ -15,54 +16,67 @@ import Button from '@mui/material/Button';
 export default function Profile({ session }) {
    const supabase = createClientComponentClient()
    const [loading, setLoading] = useState(true)
-   const [fullname, setFullname] = useState(null)
+   const [firstName, setFirstName] = useState(null)
+   const [lastName, setLastName] = useState(null)
    const [username, setUsername] = useState(null)
-   const [website, setWebsite] = useState(null)
    const [avatar_url, setAvatarUrl] = useState(null)
    const user = session?.user
- 
+   /* const navigate = useNavigate();
+   useEffect(() => {
+      if (!user){
+         // redirect to '/auth/signout'
+         navigate('/auth/signout');
+      }
+   }, [user, navigate]) */
+
    const getProfile = useCallback(async () => {
-     try {
-       setLoading(true)
+      console.log("Session ", session)
+      console.log("User", user)
+      try {
+         setLoading(true)
  
-       let { data, error, status } = await supabase
-         .from('profiles')
-         .select(`first_name, last_name, username`)
-         .eq('id', user?.id)
-         .single()
+         let { data, error, status } = await supabase
+            .from('profiles')
+            .select(`first_name, last_name, username`)
+            .eq('id', user?.id)
+            .single()
+         console.log("Data", data)
+         console.log("Error", error)
+         console.log("Status", status)
+         if (error && status !== 406) {
+            throw error
+         }
  
-       if (error && status !== 406) {
-         throw error
-       }
- 
-       if (data) {
-         setFullname(data.full_name)
-         setUsername(data.username)
-         setWebsite(data.website)
-         setAvatarUrl(data.avatar_url)
-       }
-     } catch (error) {
+         if (data) {
+            setFirstName(data.first_name)
+            setLastName(data.last_name)
+            setFullname(data.full_name)
+            setUsername(data.username)
+            setWebsite(data.website)
+            setAvatarUrl(data.avatar_url)
+         }
+      } catch (error) {
        //alert('Error loading user data!')
-     } finally {
+      } finally {
        setLoading(false)
-     }
+      }
    }, [user, supabase])
  
    useEffect(() => {
      getProfile()
    }, [user, getProfile])
  
-   async function updateProfile({ username, first_name, last_name }) {
-      console.log('user ', user?.id);
-     try {
-       setLoading(true)
+   async function updateProfile(username, first_name, last_name ) {
+      console.log("Username", username)
+      console.log("Name", first_name, last_name)
+      try {
        let { error } = await supabase.from('profiles').upsert({
-         id: user?.id,
+         id: user.id,
          username,
          first_name,
          last_name,
          updated_at: new Date().toISOString(),
-       })
+       }).select()
        if (error) throw error
        alert('Profile updated!')
      } catch (error) {
@@ -73,7 +87,7 @@ export default function Profile({ session }) {
    }
 
    const handleUpdate = (username, firstName, lastName) => {
-      updateProfile({username, firstName, lastName});
+      updateProfile(username, firstName, lastName);
    }
    return (
       <div className=''>
@@ -81,9 +95,20 @@ export default function Profile({ session }) {
          <main className="bg-var(--background-start-rgb) flex min-h-screen flex-col items-center p-24">
             <div className='flex flex-row w-3/4 justify-center grow-0'>
                <div className=''>
-                  <ProfileCard />
+                  {loading
+                     ? <ProfileCard
+                        firstName={"Loading"}
+                        lastName={"Loading"}
+                        username={"Loading"}
+                     />
+                     : <ProfileCard 
+                        firstName={firstName}
+                        lastName={lastName}
+                        username={username}
+                     />
+                  }
                   <div className='flex justify-center'>
-                     <ProfileDialog username={username} updateProfile={handleUpdate} />
+                     <ProfileDialog username={username} updateProfile={handleUpdate} setFirstName={setFirstName} setLastName={setLastName} />
                   </div>
                </div>
                <div>
