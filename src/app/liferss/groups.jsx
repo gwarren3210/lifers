@@ -41,13 +41,13 @@ const groupCard = ( group, func ) => {
 };
 
 export default function Groups(props) {
-   const { groups, getTable, setIsProfile } = props
+   const { isLoading, groups, getTable, setIsProfile } = props
    
    useEffect(() => {
-      if (!groups) {
+      if (!groups && !isLoading) {
          alert('Error loading user data!')
       }
-   }, [groups])
+   }, [groups, isLoading])
 
    return (
       <div className='p-4'>
@@ -62,8 +62,10 @@ export default function Groups(props) {
             </Button>
          </div>
          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {groups?.map((group) => groupCard(group, getTable))}
-            <p>Groups</p>
+            {isLoading
+               ? <p>Loading...</p>
+               : groups?.map((group) => groupCard(group, getTable))
+            }
          </div>
       </div>
    );

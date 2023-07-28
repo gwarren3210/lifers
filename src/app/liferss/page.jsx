@@ -6,12 +6,12 @@ import { useState, useEffect, useCallback } from 'react'
 export default function Liferss (props) {
    const { user, supabase, setIsProfile } = props
    const [groups, setGroups] = useState(null)
-   const [loading, setLoading] = useState(true)
+   const [isLoading, setIsLoading] = useState(true)
 
    console.log('Liferss user', user)
-   const getTable = useCallback(async () => {
+   const getLiferrsGroups = useCallback(async () => {
       try {
-         setLoading(true)
+         setIsLoading(true)
  
          let { data, error, status } = await supabase
             .rpc('fetch_liferss_groups', { 
@@ -28,12 +28,19 @@ export default function Liferss (props) {
       } catch (error) {
          alert('Error loading user data!')
       } finally {
-       setLoading(false)
+       setIsLoading(false)
       }
    }, [user, supabase])
 
    useEffect(() => {
-       getTable()
+       getLiferrsGroups()
    }, [])
-   return <Groups user={user} groups={groups} setIsProfile={setIsProfile} />
+
+   return <Groups 
+            user={user}
+            groups={groups}
+            setIsProfile={setIsProfile}
+            isLoading={isLoading}
+            getTable={getTable}
+         />
 }
