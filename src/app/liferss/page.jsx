@@ -6,6 +6,7 @@ import { useState, useEffect, useCallback } from 'react'
 export default function Liferss (props) {
    const { user, supabase, setIsProfile } = props
    const [groups, setGroups] = useState(null)
+   const [members, setMembers] = useState(null)
    const [isLoading, setIsLoading] = useState(true)
 
    console.log('Liferss user', user)
@@ -22,7 +23,6 @@ export default function Liferss (props) {
          }
  
          if (data) {
-            console.log('table data ', data)
             setGroups(data)
          }
       } catch (error) {
@@ -35,6 +35,26 @@ export default function Liferss (props) {
    useEffect(() => {
        getLiferrsGroups()
    }, [])
+
+   const getTable = useCallback(async (group_id) => {
+      try {
+         setIsLoading(true)
+         let { data, error, status } = await supabase
+            .rpc('get_profiles_from_group', { 
+               group_id: group_id
+            })
+         if (error && status !== 406) {
+            throw error
+         }
+         if (data) {
+            setMembers(data)
+         }
+      } catch (error) {
+         alert('Error loading member data!')
+      } finally {
+         setIsLoading(false)
+      }
+   }, [group_id])
 
    return <Groups 
             user={user}
