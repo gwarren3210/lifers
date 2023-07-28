@@ -12,6 +12,7 @@ import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import InfoCard from '../../cmp/infoCard';
 import ProfileDialog from '../../cmp/editProfileDialog';
 import Button from '@mui/material/Button';
+import Liferss from '../liferss/page';
 
 export default function Profile({ session }) {
    const supabase = createClientComponentClient()
@@ -19,7 +20,8 @@ export default function Profile({ session }) {
    const [firstName, setFirstName] = useState(null)
    const [lastName, setLastName] = useState(null)
    const [username, setUsername] = useState(null)
-   const [avatar_url, setAvatarUrl] = useState(null)
+   const [isProfile, setIsProfile] = useState(true)
+
    const user = session?.user
    /* const navigate = useNavigate();
    useEffect(() => {
@@ -30,8 +32,6 @@ export default function Profile({ session }) {
    }, [user, navigate]) */
 
    const getProfile = useCallback(async () => {
-      console.log("Session ", session)
-      console.log("User", user)
       try {
          setLoading(true)
  
@@ -40,9 +40,6 @@ export default function Profile({ session }) {
             .select(`first_name, last_name, username`)
             .eq('id', user?.id)
             .single()
-         console.log("Data", data)
-         console.log("Error", error)
-         console.log("Status", status)
          if (error && status !== 406) {
             throw error
          }
@@ -50,10 +47,7 @@ export default function Profile({ session }) {
          if (data) {
             setFirstName(data.first_name)
             setLastName(data.last_name)
-            setFullname(data.full_name)
             setUsername(data.username)
-            setWebsite(data.website)
-            setAvatarUrl(data.avatar_url)
          }
       } catch (error) {
        //alert('Error loading user data!')
@@ -89,11 +83,17 @@ export default function Profile({ session }) {
    const handleUpdate = (username, firstName, lastName) => {
       updateProfile(username, firstName, lastName);
    }
+
+   const handleViewGroups = () => {
+      setIsProfile(false);
+   }
    return (
       <div className=''>
          <Navbar key='profile'/>
          <main className="bg-var(--background-start-rgb) flex min-h-screen flex-col items-center p-24">
-            <div className='flex flex-row w-3/4 justify-center grow-0'>
+            
+            {isProfile
+               ?  <div className='flex flex-row w-3/4 justify-center grow-0'>
                <div className=''>
                   {loading
                      ? <ProfileCard
@@ -110,6 +110,15 @@ export default function Profile({ session }) {
                   <div className='flex justify-center'>
                      <ProfileDialog username={username} updateProfile={handleUpdate} setFirstName={setFirstName} setLastName={setLastName} />
                   </div>
+                  <div className='flex justify-center my-3'>
+                     <Button
+                        className='bg-[#52796f]' 
+                        variant='contained'
+                        onClick={handleViewGroups}
+                     >
+                        View Groups
+                     </Button>
+                  </div>
                </div>
                <div>
                   <InfoCard section={"Education"} title={"University of Massachusetts Amherst"} subtitle={"BS Computer Science"} dates={"2015 - 2019"}/>
@@ -123,7 +132,9 @@ export default function Profile({ session }) {
                   </div>
                   <img src="https://via.placeholder.com/500" alt="" />
                </div>
-            </div>
+                  </div>
+               : <Liferss user={user} supabase={supabase} setIsProfile={setIsProfile} />
+            }
          </main>
       </div>
    );

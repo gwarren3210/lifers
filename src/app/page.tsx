@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react'
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import LifersTable from '../cmp/table'
-import Groups from '../cmp/groups'
+import Groups from './liferss/groups'
 import Navbar from '../cmp/navbar'
 import LandingPage from '../cmp/landingPage'
 import people from '../data/people.json'

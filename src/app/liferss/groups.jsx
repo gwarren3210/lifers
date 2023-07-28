@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShare, faBell, faPlus  } from '@fortawesome/free-solid-svg-icons';
 import Switch from '@mui/material/Switch';
 import Link from 'next/link';
+import Button from '@mui/material/Button';
 import FormDialog from '@/cmp/newGroupDialog';
 import groupsData from '@/data/groups.json';
 import { getGroups } from '@/server/groups';
@@ -17,9 +18,9 @@ const CustomSwitch = (props) => {
    );
 };
 
-const groupCard = ( group, index, func ) => {
+const groupCard = ( group, func ) => {
    return (
-         <div key={index} className="max-w-sm rounded overflow-hidden shadow-lg m-4" >
+         <div key={group.id} className="max-w-sm rounded overflow-hidden shadow-lg m-4" >
             <img className="w-full h-64 object-cover" src={"https://via.placeholder.com/150"} alt={group.name} />
             <div className="bg-white px-6 py-4 flex flex-row justify-between">
                <div >
@@ -40,22 +41,29 @@ const groupCard = ( group, index, func ) => {
 };
 
 export default function Groups(props) {
-   const [groups, setGroups] = useState(groupsData);
-   useEffect(async () => {
-      const g = await getGroups();
-      console.log('g', g);
-      setGroups(g);
-   }, []);
+   const { groups, getTable, setIsProfile } = props
+   
+   useEffect(() => {
+      if (!groups) {
+         alert('Error loading user data!')
+      }
+   }, [groups])
+
    return (
       <div className='p-4'>
          <div className='flex flex-row justify-end mx-20'>
-            <FormDialog setGroups={setGroups}/> 
+            <FormDialog /> 
+            <Button
+               variant='contained'
+               className='bg-[#52796f] text-white'
+               onClick={() => setIsProfile(true)}
+            >
+               Back
+            </Button>
          </div>
          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {Object.keys(groups).map((group, index) => {
-               if (group === '') return
-               return groupCard(groups[group], index, props.toggleFunc)
-            })}
+            {groups?.map((group) => groupCard(group, getTable))}
+            <p>Groups</p>
          </div>
       </div>
    );
