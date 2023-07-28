@@ -108,7 +108,12 @@ export default function Profile({ session }) {
                      />
                   }
                   <div className='flex justify-center'>
-                     <ProfileDialog username={username} updateProfile={handleUpdate} setFirstName={setFirstName} setLastName={setLastName} />
+                     <ProfileDialog 
+                        username={username}
+                        updateProfile={handleUpdate}
+                        setFirstName={setFirstName}
+                        setLastName={setLastName}
+                     />
                   </div>
                   <div className='flex justify-center my-3'>
                      <Button
@@ -119,8 +124,11 @@ export default function Profile({ session }) {
                         View Groups
                      </Button>
                   </div>
+                  <div className='flex justify-center'>
+                     <ProfileDialog username={username} updateProfile={handleUpdate} setFirstName={setFirstName} setLastName={setLastName} />
+                  </div>
                </div>
-               <div>
+               {<div>
                   <InfoCard section={"Education"} title={"University of Massachusetts Amherst"} subtitle={"BS Computer Science"} dates={"2015 - 2019"}/>
                   <InfoCard section={"Experience"} title={"Software Engineer"} subtitle={"Google"} dates={"2019 - Present"}/>
                   <InfoCard section={"Location"} title={"San Francisco"} subtitle={"California"} dates={"2019 - Present"}/>
@@ -131,7 +139,7 @@ export default function Profile({ session }) {
                      ))}
                   </div>
                   <img src="https://via.placeholder.com/500" alt="" />
-               </div>
+               </div>}
                   </div>
                : <Liferss user={user} supabase={supabase} setIsProfile={setIsProfile} />
             }

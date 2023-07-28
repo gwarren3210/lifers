@@ -58,6 +58,7 @@ export default function Liferss (props) {
 
    return <Groups 
             user={user}
+            supabase={supabase}
             groups={groups}
             setIsProfile={setIsProfile}
             isLoading={isLoading}

@@ -10,10 +10,13 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { createGroup } from '@/server/groups';
 
 export default function FormDialog(props) {
+   const { user, supabase } = props;
    const [open, setOpen] = useState(false);
    const [isCreating, setIsCreating] = useState(false);
    const [name, setName] = useState('');
    const [description, setDescription] = useState('');
+   const [usingCode, setusingCode] = useState(false);
+
    const handleClickOpen = () => setOpen(true);
    const handleClose = () => {
       setOpen(false);
@@ -22,11 +25,22 @@ export default function FormDialog(props) {
    };
    const handleCreate = async () => {
       setIsCreating(true);
-      const g = await createGroup(name, description);
-      console.log('g', g);
-      setIsCreating(false)
-      props.setGroups(g);
-      handleClose();
+      try {
+         const res = await supabase
+            .from('liferss')
+            .insert({
+               name, 
+               description,
+               members: [user.id],
+               admins: [user.id]
+            });
+      } catch (error) {
+         alert(error.message);
+      }
+      finally {
+         setIsCreating(false);
+         handleClose();
+      }
    };
 
    return (
@@ -58,7 +72,7 @@ export default function FormDialog(props) {
                   onChange={(e) => setDescription(e.target.value)}
                />
             </DialogContent>
-            <DialogActions>
+            <DialogActions className=''>
                <Button onClick={handleClose}>Cancel</Button>
                <Button onClick={handleCreate}>Create</Button>
             </DialogActions>
