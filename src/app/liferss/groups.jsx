@@ -7,7 +7,7 @@ import { faShare, faBell, faPlus  } from '@fortawesome/free-solid-svg-icons';
 import Switch from '@mui/material/Switch';
 import Button from '@mui/material/Button';
 import FormDialog from '@/cmp/newGroupDialog';
-import Table from '@/cmp/table';
+import poepleTable from '@/cmp/table';
 
 const CustomSwitch = (props) => {
    return (
@@ -45,22 +45,32 @@ export default function Groups(props) {
       members, 
       isLoading, 
       groups, 
+      handleGetGroups,
       getTable, 
       setIsProfile,
       user,
       supabase
    } = props
-   const [isMemebers, setIsMembers] = useState(false)
+   const [isMembers, setIsMembers] = useState(false)
 
    useEffect (() => {
-      if (!groups && !isLoading) {
+      if (!groups && !loading) {
          alert('Error loading user data!')
       }
-   }, [groups, isLoading])
+   }, [groups, loading])
 
    const handleGroupClick = (group_id) => {
       getTable(group_id)
       setIsMembers(true)
+   }
+
+   const page = () => {
+      if (loading) return <p>Loading...</p>
+      else if (isMembers) return <poepleTable people={members} toTable={()=> setIsMembers()} className='' />
+      else if (groups.length === 0) return <p>You are not a member of any groups</p>
+      else return <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+               {groups?.map((group) => groupCard(group, handleGroupClick))}
+            </div>
    }
 
    return (
@@ -75,17 +85,7 @@ export default function Groups(props) {
                Back
             </Button>
          </div>
-            {isLoading
-               ? <p>Loading...</p>
-               : isMemebers
-                  ? <Table people={members} toTable={()=> setIsMembers()} className='bg-red-300' />
-                  : groups.length === 0 
-                     ? <p>You are not a member of any groups</p>
-                     : <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                        {groups?.map((group) => groupCard(group, handleGroupClick))}
-                     </div>
-            }
-         
+            {page()}
       </div>
    );
 };

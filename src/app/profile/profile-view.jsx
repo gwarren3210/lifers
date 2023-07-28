@@ -2,90 +2,56 @@
 import 'tailwindcss/tailwind.css';
 import '@/app/globals.css'
 import Navbar from "@/cmp/navbar";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import ProfileCard from '../../cmp/profileCard';
-import infoCard from '../../cmp/infoCard';
-import { useCallback, useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import InfoCard from '../../cmp/infoCard';
 import ProfileDialog from '../../cmp/editProfileDialog';
 import Button from '@mui/material/Button';
 import Liferss from '../liferss/page';
+import { updateProfile, getProfile } from '@/server/profile.js';
+import { getGroups } from '@/server/groups.js'
 
 export default function Profile({ session }) {
    const supabase = createClientComponentClient()
+   const user = session?.user
    const [loading, setLoading] = useState(true)
    const [firstName, setFirstName] = useState(null)
    const [lastName, setLastName] = useState(null)
    const [username, setUsername] = useState(null)
    const [isProfile, setIsProfile] = useState(true)
+   const [groups, setGroups] = useState(null)
 
-   const user = session?.user
-   /* const navigate = useNavigate();
-   useEffect(() => {
-      if (!user){
-         // redirect to '/auth/signout'
-         navigate('/auth/signout');
+   useEffect(async () => {
+      setLoading(true)
+      const data = await getProfile(user);
+      if (data) {
+         setFirstName(data.first_name)
+         setLastName(data.last_name)
+         setUsername(data.username)
       }
-   }, [user, navigate]) */
+      setLoading(false)
+   }, [user])
 
-   const getProfile = useCallback(async () => {
-      try {
-         setLoading(true)
- 
-         let { data, error, status } = await supabase
-            .from('profiles')
-            .select(`first_name, last_name, username`)
-            .eq('id', user?.id)
-            .single()
-         if (error && status !== 406) {
-            throw error
-         }
- 
-         if (data) {
-            setFirstName(data.first_name)
-            setLastName(data.last_name)
-            setUsername(data.username)
-         }
-      } catch (error) {
-       //alert('Error loading user data!')
-      } finally {
-       setLoading(false)
+   const handleUpdate = async (username, firstName, lastName) => {
+      setLoading(true)
+      const res = await updateProfile(user, username, firstName, lastName);
+      if (res) {
+         setFirstName(firstName)
+         setLastName(lastName)
+         setUsername(username)
       }
-   }, [user, supabase])
- 
-   useEffect(() => {
-     getProfile()
-   }, [user, getProfile])
- 
-   async function updateProfile(username, first_name, last_name ) {
-      console.log("Username", username)
-      console.log("Name", first_name, last_name)
-      try {
-       let { error } = await supabase.from('profiles').upsert({
-         id: user.id,
-         username,
-         first_name,
-         last_name,
-         updated_at: new Date().toISOString(),
-       }).select()
-       if (error) throw error
-       alert('Profile updated!')
-     } catch (error) {
-       alert('Error updating the data!')
-     } finally {
-       setLoading(false)
-     }
+      setLoading(false)
    }
 
-   const handleUpdate = (username, firstName, lastName) => {
-      updateProfile(username, firstName, lastName);
-   }
-
-   const handleViewGroups = () => {
+   const handleViewGroups = async () => {
       setIsProfile(false);
+      setLoading(true)
+      const data = await getGroups(user)    
+      if (data) {
+         setGroups(data)
+      }
+      setLoading(false)
    }
    return (
       <div className=''>
@@ -125,10 +91,16 @@ export default function Profile({ session }) {
                      </Button>
                   </div>
                   <div className='flex justify-center'>
-                     <ProfileDialog username={username} updateProfile={handleUpdate} setFirstName={setFirstName} setLastName={setLastName} />
+                     <ProfileDialog
+                        username={username}
+                        updateProfile={handleUpdate}
+                        setFirstName={setFirstName}
+                        setLastName={setLastName}
+                        isLoad={true}
+                     />
                   </div>
                </div>
-               {<div>
+               <div>
                   <InfoCard section={"Education"} title={"University of Massachusetts Amherst"} subtitle={"BS Computer Science"} dates={"2015 - 2019"}/>
                   <InfoCard section={"Experience"} title={"Software Engineer"} subtitle={"Google"} dates={"2019 - Present"}/>
                   <InfoCard section={"Location"} title={"San Francisco"} subtitle={"California"} dates={"2019 - Present"}/>
@@ -138,10 +110,17 @@ export default function Profile({ session }) {
                            <p className='text-xl text-center mx-3'>{header}</p>
                      ))}
                   </div>
-                  <img src="https://via.placeholder.com/500" alt="" />
-               </div>}
+                  {/* <img src="https://via.placeholder.com/500" alt="" /> */}
+               </div>
                   </div>
-               : <Liferss user={user} supabase={supabase} setIsProfile={setIsProfile} />
+               :  <Liferss 
+                     groups={groups}
+                     user={user}
+                     supabase={supabase}
+                     loading={loading}
+                     setLoading={setLoading}
+                     setIsProfile={setIsProfile}
+                  />
             }
          </main>
       </div>
