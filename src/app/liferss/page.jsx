@@ -54,7 +54,7 @@ export default function Liferss (props) {
       } finally {
          setIsLoading(false)
       }
-   }, [group_id])
+   }, [])
 
    return <Groups 
             user={user}
@@ -62,5 +62,6 @@ export default function Liferss (props) {
             setIsProfile={setIsProfile}
             isLoading={isLoading}
             getTable={getTable}
+            members={members}
          />
 }

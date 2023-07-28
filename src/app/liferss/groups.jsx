@@ -1,4 +1,6 @@
 'use client';
+import 'tailwindcss/tailwind.css';
+import '@/app/globals.css'
 import { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShare, faBell, faPlus  } from '@fortawesome/free-solid-svg-icons';
@@ -8,6 +10,7 @@ import Button from '@mui/material/Button';
 import FormDialog from '@/cmp/newGroupDialog';
 import groupsData from '@/data/groups.json';
 import { getGroups } from '@/server/groups';
+import Table from '@/cmp/table';
 
 const CustomSwitch = (props) => {
    return (
@@ -41,13 +44,19 @@ const groupCard = ( group, func ) => {
 };
 
 export default function Groups(props) {
-   const { isLoading, groups, getTable, setIsProfile } = props
-   
-   useEffect(() => {
+   const { members, isLoading, groups, getTable, setIsProfile } = props
+   const [isMemebers, setIsMembers] = useState(false)
+
+   useEffect (() => {
       if (!groups && !isLoading) {
          alert('Error loading user data!')
       }
    }, [groups, isLoading])
+
+   const handleGroupClick = (group_id) => {
+      getTable(group_id)
+      setIsMembers(true)
+   }
 
    return (
       <div className='p-4'>
@@ -61,12 +70,15 @@ export default function Groups(props) {
                Back
             </Button>
          </div>
-         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {isLoading
                ? <p>Loading...</p>
-               : groups?.map((group) => groupCard(group, getTable))
+               : isMemebers
+                  ? <Table people={members} toTable={()=> setIsMembers()} className='bg-red-300' />
+                  : <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                     {groups?.map((group) => groupCard(group, handleGroupClick))}
+                  </div>
             }
-         </div>
+         
       </div>
    );
 };
