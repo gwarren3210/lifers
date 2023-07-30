@@ -7,7 +7,7 @@ import { faShare, faBell, faPlus  } from '@fortawesome/free-solid-svg-icons';
 import Switch from '@mui/material/Switch';
 import Button from '@mui/material/Button';
 import FormDialog from '@/cmp/newGroupDialog';
-import poepleTable from '@/cmp/table';
+import PeopleTable from '@/cmp/table';
 
 const CustomSwitch = (props) => {
    return (
@@ -54,10 +54,10 @@ export default function Groups(props) {
    const [isMembers, setIsMembers] = useState(false)
 
    useEffect (() => {
-      if (!groups && !loading) {
+      if (!groups && !isLoading) {
          alert('Error loading user data!')
       }
-   }, [groups, loading])
+   }, [groups, isLoading])
 
    const handleGroupClick = (group_id) => {
       getTable(group_id)
@@ -65,8 +65,9 @@ export default function Groups(props) {
    }
 
    const page = () => {
-      if (loading) return <p>Loading...</p>
-      else if (isMembers) return <poepleTable people={members} toTable={()=> setIsMembers()} className='' />
+      if (isLoading) return <p>Loading...</p>
+      else if (isMembers) return <PeopleTable people={members} toTable={()=> setIsMembers()} className='' />
+      else if (!groups) return <p>You are not a member of any groups</p>
       else if (groups.length === 0) return <p>You are not a member of any groups</p>
       else return <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                {groups?.map((group) => groupCard(group, handleGroupClick))}

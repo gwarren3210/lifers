@@ -22,15 +22,18 @@ export default function Profile({ session }) {
    const [isProfile, setIsProfile] = useState(true)
    const [groups, setGroups] = useState(null)
 
-   useEffect(async () => {
-      setLoading(true)
-      const data = await getProfile(user);
-      if (data) {
-         setFirstName(data.first_name)
-         setLastName(data.last_name)
-         setUsername(data.username)
+   useEffect(() => {
+      const getData = async () => {      
+         setLoading(true)
+         const data = await getProfile(user);
+         if (data) {
+            setFirstName(data.first_name)
+            setLastName(data.last_name)
+            setUsername(data.username)
+         }
+         setLoading(false)
       }
-      setLoading(false)
+      getData()
    }, [user])
 
    const handleUpdate = async (username, firstName, lastName) => {
@@ -45,13 +48,15 @@ export default function Profile({ session }) {
    }
 
    const handleViewGroups = async () => {
-      setIsProfile(false);
       setLoading(true)
       const data = await getGroups(user)    
       if (data) {
+         console.log('data', data)
+         setIsProfile(false);
          setGroups(data)
       }
       setLoading(false)
+      console.log('handleViewGroups')
    }
    return (
       <div className=''>

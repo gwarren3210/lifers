@@ -16,20 +16,21 @@ export async function createGroup(name, description) {
 }
 
 export async function getGroups(user) {
+   /* return { data: [ { name: "Test Group", description: "Test Description", members: ["davidthompson"] } ]
+   } */
    let returnData = null;
    try {
       let { data, error, status } = await supabase
          .rpc('fetch_liferss_groups', { 
             profile_id: user.id
          })
-      console.log("getGroups data: ", data)
-      console.log("getGroups error: ", error)
-      console.log("getGroups status: ", status)
+      if (data) {
+         console.log("getGroups data: ", data)
+      }
       if (error && status !== 406) {
          throw error
       }
       returnData = data;
-      console.log("getGroups data: ", data)
    } catch (error) {
       console.log('Error loading group data: ', error.message)
       alert('Error loading group data!')

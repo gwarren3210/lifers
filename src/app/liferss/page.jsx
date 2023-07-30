@@ -13,7 +13,7 @@ export default function Liferss (props) {
       setIsProfile
    } = props
    const [members, setMembers] = useState(null)
-   const [isLoading, setIsLoading] = useState(true)
+   const [isLoading, setIsLoading] = useState(false)
    const [testGroups, setTestGroups] = useState(null)
 
    const getTable = useCallback(async (group_id) => {
@@ -57,14 +57,6 @@ export default function Liferss (props) {
       }
    } */
 
-   useEffect(() => {
-      //fetchGroups();
-      console.log('groups', groups)
-      console.log('loading', loading)
-      console.log('members', members)
-      console.log('isLoading', isLoading)
-      console.log('user', user.id)
-   }, [groups, loading, members, isLoading])
    return <Groups 
             user={user}
             supabase={supabase}

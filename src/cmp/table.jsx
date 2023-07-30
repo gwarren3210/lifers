@@ -1,6 +1,6 @@
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 
-export default function poepleTable(props) {
+export default function PeopleTable(props) {
 
    const dateFormater = (date) => {
       const d = new Date(date);
