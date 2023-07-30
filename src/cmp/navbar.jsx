@@ -14,7 +14,7 @@ export default function Navbar(props) {
          </div>
          <ul className='text-black md:flex hidden list-none flex-row justify-between items-center flex-initial'>
             {['Home', 'Nav2', 'Nav3', 'Nav4'].map((item, index) => (
-               <Link href='/'>
+               <Link href='/' key={index} >
                   <NavItem onClick={()=>props.toggleFunc('')} title={item} key={item + index} classProps='hover:text-[#52796f]'/>
                </Link>
             ))}

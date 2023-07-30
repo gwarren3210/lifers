@@ -112,7 +112,7 @@ export default function Profile({ session }) {
                   <InfoCard section={"Other"} title={"Birthday"} subtitle={"Jan 5th, 1995"} dates={"28 yrs old"}/>
                   <div className='flex flex-row justify-center m-4 bg-white rounded-lg overflow-hidden py-2 shadow-lg'>
                      {["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"].map((header, key) => (
-                           <p className='text-xl text-center mx-3'>{header}</p>
+                           <p key={key} className='text-xl text-center mx-3'>{header}</p>
                      ))}
                   </div>
                   {/* <img src="https://via.placeholder.com/500" alt="" /> */}
