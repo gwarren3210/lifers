@@ -1,7 +1,7 @@
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 
 export default function PeopleTable(props) {
-
+   console.log('props people', props.people)
    const dateFormater = (date) => {
       const d = new Date(date);
       return d.toLocaleDateString();

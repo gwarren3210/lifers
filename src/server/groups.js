@@ -38,3 +38,23 @@ export async function getGroups(user) {
       return returnData;
    }
 }
+
+export async function getMembers (group_id) {
+   let returnMembers = null;
+   try {
+      let { data, error, status } = await supabase
+         .rpc('get_profiles_from_group', { 
+            group_id: group_id
+         })
+      if (error && status !== 406) {
+         throw error
+      }
+      if (data) {
+         returnMembers = data
+      }
+   } catch (error) {
+      alert('Error loading member data!')
+   } finally {
+      return returnMembers;
+   }
+}

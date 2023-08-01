@@ -1,13 +1,14 @@
 'use client';
 import 'tailwindcss/tailwind.css';
 import '@/app/globals.css'
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShare, faBell, faPlus  } from '@fortawesome/free-solid-svg-icons';
 import Switch from '@mui/material/Switch';
 import Button from '@mui/material/Button';
 import FormDialog from '@/cmp/newGroupDialog';
 import PeopleTable from '@/cmp/table';
+import { getMembers } from '@/server/groups';
 
 const CustomSwitch = (props) => {
    return (
@@ -41,17 +42,24 @@ const groupCard = ( group, func ) => {
 };
 
 export default function Groups(props) {
-   const { 
-      members, 
-      isLoading, 
+   const {   
       groups, 
       handleGetGroups,
-      getTable, 
       setIsProfile,
       user,
       supabase
    } = props
    const [isMembers, setIsMembers] = useState(false)
+
+   const [members, setMembers] = useState(null)
+   const [isLoading, setIsLoading] = useState(false)
+   
+   const getTable = useCallback(async (group_id) => {
+         setIsLoading(true)
+         const data = await getMembers(group_id)
+         if (data) setMembers(data)
+         setIsLoading(false)
+   }, [])
 
    useEffect (() => {
       if (!groups && !isLoading) {
