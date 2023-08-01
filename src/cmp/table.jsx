@@ -1,7 +1,7 @@
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 
 export default function PeopleTable(props) {
-   console.log('props people', props.people)
+   let { people, toTable } = props;
    const dateFormater = (date) => {
       const d = new Date(date);
       return d.toLocaleDateString();
@@ -9,7 +9,7 @@ export default function PeopleTable(props) {
 
    return (
       <div className=''>
-         <button onClick={props.toTable} className='text-white bg-[#52796f] py-2 px-7 mx-4 rounded-full mb-5 hover:bg-[#84a98c]'>
+         <button onClick={toTable} className='text-white bg-[#52796f] py-2 px-7 mx-4 rounded-full mb-5 hover:bg-[#84a98c]'>
             Back
          </button>
          <TableContainer component={Paper} className='shadow-lg'>
@@ -22,7 +22,7 @@ export default function PeopleTable(props) {
                </TableRow>
             </TableHead>
             <TableBody>
-               {props.people.map((person) => (
+               {people.map((person) => (
                   <TableRow key={person.id}>
                      <TableCell>{person.first_name}</TableCell>
                      <TableCell>{person.last_name}</TableCell>
