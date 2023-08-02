@@ -6,7 +6,7 @@ const NavItem = ({title, classProps }) => {
    )
 }
 
-export default function Navbar(props) {
+export default function Navbar() {
    return (
       <nav className='bg-white z-10 w-full flex md:justify-center justify-between items-center p-4 shadow-lg fixed top-0 '>
          <div className='md:flex-[0.5] flex-initial justify-center items-center'>
@@ -15,7 +15,7 @@ export default function Navbar(props) {
          <ul className='text-black md:flex hidden list-none flex-row justify-between items-center flex-initial'>
             {['Home', 'Nav2', 'Nav3', 'Nav4'].map((item, index) => (
                <Link href='/' key={index} >
-                  <NavItem onClick={()=>props.toggleFunc('')} title={item} key={item + index} classProps='hover:text-[#52796f]'/>
+                  <NavItem onClick={()=>console.log("Navbar Clicked")} title={item} key={item + index} classProps='hover:text-[#52796f]'/>
                </Link>
             ))}
             <li className='w-10 h-10 rounded-full overflow-hidden'>

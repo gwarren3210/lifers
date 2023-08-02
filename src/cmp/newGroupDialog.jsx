@@ -7,7 +7,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
-import { createGroup } from '@/server/groups';
+import { createGroup } from '@/server/groups';1
 
 export default function FormDialog(props) {
    const { user, supabase } = props;
@@ -15,7 +15,7 @@ export default function FormDialog(props) {
    const [isCreating, setIsCreating] = useState(false);
    const [name, setName] = useState('');
    const [description, setDescription] = useState('');
-   const [usingCode, setusingCode] = useState(false);
+   const [usingCode, setUsingCode] = useState(false);
 
    const handleClickOpen = () => setOpen(true);
    const handleClose = () => {

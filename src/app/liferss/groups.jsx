@@ -42,15 +42,8 @@ const groupCard = ( group, func ) => {
 };
 
 export default function Groups(props) {
-   const {   
-      groups, 
-      handleGetGroups,
-      setIsProfile,
-      user,
-      supabase
-   } = props
+   const { groups, setIsProfile, user, supabase } = props
    const [isMembers, setIsMembers] = useState(false)
-
    const [members, setMembers] = useState(null)
    const [isLoading, setIsLoading] = useState(false)
    
