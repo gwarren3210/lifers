@@ -3,6 +3,7 @@ import {TextField, Button } from '@mui/material';
 //import { createUser } from '@/server/users';
 import supabase from '../../supabase';
 import AuthForm from '@/cmp/auth-form';
+import { login, signup } from '@/server/auth';
 
 export default function LandingPage() {
    const [email, setEmail] = useState('');
@@ -39,19 +40,10 @@ export default function LandingPage() {
          alert('Please enter a valid password');
          return;
       }
-      try {
-         const { user, error } = await supabase.auth.signUp({ email, password });
-         if (error) {
-           console.error('Error creating user:', error);
-           return null;
-         }
-         console.log('createUser user:', user);
-         setSignedIn(true);
-         return user;
-      } catch (error) {
-         console.error('Error creating user:', error);
-         return null;
-      }
+      const user = await signup(email, password)
+      if (user) setSignedIn(true)
+      else alert('Error creating user');
+      return user;
    };
 
    const loginUser = async () => {
@@ -63,19 +55,10 @@ export default function LandingPage() {
          alert('Please enter a valid password');
          return;
       }
-      try {
-         const { user, error } = await supabase.auth.signInWithPassword({ email, password });
-         if (error) {
-             console.error('Error logging in user:', error);
-               return null;
-         }
-         console.log('loginUser user:', user);
-         setSignedIn(true);
-         return user;
-      } catch (error) {
-         console.error('Error logging in user:', error);
-         return null;
-      }
+      const user = await login(email, password)
+      if (user) setSignedIn(true)
+      else alert('Error logging in user');
+      return user;
    };
 
    const handlePasswordReset = async () => {
