@@ -10,6 +10,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { updateInfoCard } from '@/server/infoCards';
 
 export default function InfoCardDiaolog(props) {
    const { } = props;
@@ -36,7 +37,13 @@ export default function InfoCardDiaolog(props) {
    
    const handleCreate = async () => {
       setIsCeating(true);
-      const res = await updateProfile(newUsername, firstName, LastName);
+      const cardData = {
+         title,
+         subtitle,
+         startDate,
+         endDate,
+      };
+      const res = await updateInfoCard(section, cardData);
       setIsCeating(false)
       handleClose();
    };
