@@ -64,7 +64,7 @@ export default function InfoCardDiaolog(props) {
                <TextField
                      value={title}
                      autoFocus
-                     margin="desnse"
+                     margin="dense"
                      id="title"
                      label="Title"
                      fullWidth

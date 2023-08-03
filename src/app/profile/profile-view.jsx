@@ -11,16 +11,19 @@ import Button from '@mui/material/Button';
 import Liferss from '../liferss/page';
 import { updateProfile, getProfile } from '@/server/profile.js';
 import { getGroups } from '@/server/groups.js'
+import { getCards } from '@/server/infoCards'
 
 export default function Profile({ session }) {
    const supabase = createClientComponentClient()
    const user = session?.user
    const [loading, setLoading] = useState(true)
+   const [cardsLoading, setCardsLoading] = useState(true)
    const [firstName, setFirstName] = useState(null)
    const [lastName, setLastName] = useState(null)
    const [username, setUsername] = useState(null)
    const [isProfile, setIsProfile] = useState(true)
    const [groups, setGroups] = useState(null)
+   const [cards, setCards] = useState(null)
 
    useEffect(() => {
       const getData = async () => {      
@@ -34,6 +37,19 @@ export default function Profile({ session }) {
          setLoading(false)
       }
       getData()
+   }, [user])
+
+   useEffect(() => {
+      const getCardsData = async () => {      
+         setCardsLoading(true)
+         const data = await getCards(user);
+         if (data) {
+            setCards(data)
+         }
+         setCardsLoading(false)
+      }
+      getCardsData()
+      console.log("info cards: ", cards);
    }, [user])
 
    const handleUpdate = async (username, firstName, lastName) => {
@@ -106,10 +122,15 @@ export default function Profile({ session }) {
                   </div>
                </div>
                <div>
-                  <InfoCard section={"Education"} title={"University of Massachusetts Amherst"} subtitle={"BS Computer Science"} dates={"2015 - 2019"}/>
-                  <InfoCard section={"Experience"} title={"Software Engineer"} subtitle={"Google"} dates={"2019 - Present"}/>
-                  <InfoCard section={"Location"} title={"San Francisco"} subtitle={"California"} dates={"2019 - Present"}/>
-                  <InfoCard section={"Other"} title={"Birthday"} subtitle={"Jan 5th, 1995"} dates={"28 yrs old"}/>
+                  {cardsLoading
+                     ? <InfoCard section={"Loading"} title={"Loading"} subtitle={"Loading"} dates={"Loading"}/>
+                     : <div> 
+                        <InfoCard section={"Education"} cards={cards.education} />
+                        <InfoCard section={"Experience"} cards={cards.experience} />
+                        <InfoCard section={"Residence"} cards={cards.residence} />
+                        <InfoCard section={"Custom"} cards={cards.cards} />
+                     </div>
+                  }
                   <div className='flex flex-row justify-center m-4 bg-white rounded-lg overflow-hidden py-2 shadow-lg'>
                      {["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"].map((header, key) => (
                            <p key={key} className='text-xl text-center mx-3'>{header}</p>
