@@ -5,11 +5,10 @@ import { cookies } from 'next/headers'
 import Profile from './profile-view' ;
 
 export default async function ProfilePage() {
-   const supabase = createServerComponentClient({ cookies })
+  const supabase = createServerComponentClient({ cookies })
+  const {
+    data: { session },
+  } = await supabase.auth.getSession()
 
-   const {
-     data: { session },
-   } = await supabase.auth.getSession()
-
-   return <Profile session={session} />
+  return <Profile session={session} />
 };

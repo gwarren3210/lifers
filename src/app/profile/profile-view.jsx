@@ -12,10 +12,13 @@ import Liferss from '../liferss/page';
 import { updateProfile, getProfile } from '@/server/profile.js';
 import { getGroups } from '@/server/groups.js'
 import { getCards } from '@/server/infoCards'
+import { useRouter } from 'next/navigation'
 
 export default function Profile({ session }) {
    const supabase = createClientComponentClient()
    const user = session?.user
+   const router = useRouter()
+   if (!user) router.push('/')
    const [loading, setLoading] = useState(true)
    const [cardsLoading, setCardsLoading] = useState(true)
    const [firstName, setFirstName] = useState(null)
