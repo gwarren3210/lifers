@@ -1,3 +1,4 @@
+import { get } from "http";
 import supabase from "../../supabase";
 
 export async function getCards(user) {
@@ -13,27 +14,58 @@ export async function getCards(user) {
    return data;
 }
 
-export async function createCard(section, cardData) {
+export async function getCardsBySection(user, section) {
+   const { data, error } = await supabase
+      .from('profiles')
+      .select(section)
+      .eq('id', user.id)
+   if (error) {
+      console.error("Error getting cards from", section,":",error);
+      return null;
+   }
+   console.log("getCardBySection data:", data);
+   return data;   
+}
 
+export async function appendEducationCard(user, cardData) {
+   console.log("appendEducationCard cardData:", cardData);
+   console.log("appendEducationCard user:", user);
+   let { data, error } = await supabase.rpc('append_entry', {
+      column_name: 'education',
+      new_data: JSON.stringify(cardData),
+      profile_id: user.id
+   })
+   if (error) {
+      console.error("Error creating card:", error);
+      return false;
+   }
+   return getCardsBySection(user, 'education');
+}
+
+export async function createCard(section, cardData) {
+   console.log("createCard section:", section);
+   console.log("createCard cardData:", cardData);
    // special card
-   if (['Education', 'Experience', 'Residence'].find(section)) {
-      const { data, error } = await supabase.from(section).insert([cardData]);
-      if (error) {
+   if (['education', 'experience', 'residence'].includes(section)) {
+      try {
+         const { data, error } = await supabase.from(section).upsert([cardData]);
+         console.log("createCard data:", data);
+         console.log("createCard error:", error);
+         if (!error) return data;
+      } catch (error) {
          console.error("Error creating card:", error.message);
          return null;
       }
-      console.log("createCard data:", data);
-      return data;
    }
 
    // generic card
-   const { data, error } = await supabase.from("cards").insert([card]);
+   /* const { data, error } = await supabase.from("cards").insert([card]);
    if (error) {
       console.error("Error creating card:", error);
       return null;
    }
    console.log("createCard data:", data);
-   return data;
+   return data; */
 }
 
 /* export async function updateCard(card) {

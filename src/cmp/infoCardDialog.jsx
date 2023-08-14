@@ -10,23 +10,28 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { updateInfoCard } from '@/server/infoCards';
+import { createCard } from '@/server/infoCards';
+import MenuItem from '@mui/material/MenuItem';
 
-export default function InfoCardDiaolog(props) {
-   const { } = props;
+export default function InfoCardDialog(props) {
+   const { section, append, user } = props;
    const [open, setOpen] = useState(false);
-   const [isCreating, setIsCeating] = useState(false);
+   const [isCreating, setIsCreating] = useState(false);
    const [title, setTitle] = useState('');
    const [subtitle, setSubtitle] = useState('');
-   const [startDate, setStartDate] = useState(null);
-   const [endDate, setEndDate] = useState(null);
+   const [startMonth, setStartMonth] = useState(1); // Default to January (1)
+   const [startYear, setStartYear] = useState(new Date().getFullYear());
+   const [endMonth, setEndMonth] = useState(1); // Default to January (1)
+   const [endYear, setEndYear] = useState(new Date().getFullYear());
    const handleClickOpen = () => setOpen(true);
 
    const clearFields = () => {
       setTitle('');
       setSubtitle('');
-      setStartDate(null);
-      setEndDate(null);
+      setStartMonth(1);
+      setStartYear(new Date().getFullYear());
+      setEndMonth(1);
+      setEndYear(new Date().getFullYear());
    };
 
    const handleClose = () => {
@@ -36,15 +41,17 @@ export default function InfoCardDiaolog(props) {
    };
    
    const handleCreate = async () => {
-      setIsCeating(true);
+      setIsCreating(true);
+      console.log("Creating card...");
       const cardData = {
          title,
          subtitle,
-         startDate,
-         endDate,
+         startDate: new Date(startYear, startMonth - 1, 1), // Set the date to the first day of the selected month
+         endDate: new Date(endYear, endMonth - 1, 1), // Set the date to the first day of the selected month
       };
-      const res = await updateInfoCard(section, cardData);
-      setIsCeating(false)
+      console.log("Card data: ", cardData);
+      const res = await append(user, cardData);
+      setIsCreating(false);
       handleClose();
    };
 
@@ -59,9 +66,9 @@ export default function InfoCardDiaolog(props) {
                <FontAwesomeIcon icon={faPlus} className='text-[#52796f] hover:text-[#84a98c]'/>
             </Button>
             <Dialog open={open} onClose={handleClose} >
-               <DialogTitle>Update your Lifers Profile</DialogTitle>
+               <DialogTitle>Update your {section} </DialogTitle>
                <DialogContent>
-               <TextField
+                  <TextField
                      value={title}
                      autoFocus
                      margin="dense"
@@ -83,27 +90,65 @@ export default function InfoCardDiaolog(props) {
                      variant="filled"
                      onChange={(e) => setSubtitle(e.target.value)}
                   />
+                  <div className='flex justify-ends gap-2 mb-2'>
+                     <TextField
+                        select
+                        fullWidth
+                        label="Start Month"
+                        value={startMonth}
+                        onChange={(e) => setStartMonth(e.target.value)}
+                        variant="filled"
+                     >
+                        {Array.from({ length: 12 }, (_, i) => i + 1).map((month) => (
+                           <MenuItem key={month} value={month}>
+                              {new Date(0, month - 1, 1).toLocaleString('en', { month: 'long' })}
+                           </MenuItem>
+                        ))}
+                     </TextField>
+                     <TextField
+                        select
+                        fullWidth
+                        label="Start Year"
+                        value={startYear}
+                        onChange={(e) => setStartYear(e.target.value)}
+                        variant="filled"
+                     >
+                        {Array.from({ length: 41 }, (_, i) => new Date().getFullYear() - 30 + i).map((year) => (
+                           <MenuItem key={year} value={year}>
+                              {year}
+                           </MenuItem>
+                        ))}
+                     </TextField>
+                  </div>
                   <div className='flex justify-ends gap-4'>
-                     <DateField
-                        //value={startDate}
-                        autoFocus
-                        margin="normal"
-                        id="start-date"
-                        label="Start Date"
+                     <TextField
+                        select
+                        fullWidth
+                        label="End Month"
+                        value={endMonth}
+                        onChange={(e) => setEndMonth(e.target.value)}
                         variant="filled"
-                        views={['year', 'month']}
-                        inputFormat="MM/yy"
-                        //onChange={(e) => setStartDate(e.target.value)}
-                     />
-                     <DateField
-                        //value={endDate}
-                        autoFocus
-                        margin="normal"
-                        id="end-date"
-                        label="End Date"
+                     >
+                        {Array.from({ length: 12 }, (_, i) => i + 1).map((month) => (
+                           <MenuItem key={month} value={month}>
+                              {new Date(0, month - 1, 1).toLocaleString('en', { month: 'long' })}
+                           </MenuItem>
+                        ))}
+                     </TextField>
+                     <TextField
+                        select
+                        fullWidth
+                        label="End Year"
+                        value={endYear}
+                        onChange={(e) => setEndYear(e.target.value)}
                         variant="filled"
-                        //onChange={(e) => setEndDate(e.target.value)}
-                     />
+                     >
+                        {Array.from({ length: 41 }, (_, i) => new Date().getFullYear() - 30 + i).map((year) => (
+                           <MenuItem key={year} value={year}>
+                              {year}
+                           </MenuItem>
+                        ))}
+                     </TextField>
                   </div>
                </DialogContent>
                <DialogActions>
@@ -112,6 +157,6 @@ export default function InfoCardDiaolog(props) {
                </DialogActions>
             </Dialog>
          </LocalizationProvider>
-    </div>
-  );
+      </div>
+   );
 }

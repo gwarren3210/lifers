@@ -11,7 +11,7 @@ import Button from '@mui/material/Button';
 import Liferss from '../liferss/page';
 import { updateProfile, getProfile } from '@/server/profile.js';
 import { getGroups } from '@/server/groups.js'
-import { getCards } from '@/server/infoCards'
+import { getCards, appendEducationCard } from '@/server/infoCards'
 import { useRouter } from 'next/navigation'
 
 export default function Profile({ session }) {
@@ -128,7 +128,7 @@ export default function Profile({ session }) {
                   {cardsLoading
                      ? <InfoCard section={"Loading"} title={"Loading"} subtitle={"Loading"} dates={"Loading"}/>
                      : <div> 
-                        <InfoCard section={"Education"} cards={cards.education} />
+                        <InfoCard user={user} section={"Education"} cards={cards.education} append={appendEducationCard} />
                         <InfoCard section={"Experience"} cards={cards.experience} />
                         <InfoCard section={"Residence"} cards={cards.residence} />
                         <InfoCard section={"Custom"} cards={cards.cards} />
