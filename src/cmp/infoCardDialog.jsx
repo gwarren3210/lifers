@@ -66,8 +66,9 @@ export default function InfoCardDialog(props) {
                onClick={handleClickOpen}
                color='primary'
                rounded='full'
+               sx={ { borderRadius: 70 } }
             >
-               <FontAwesomeIcon icon={faPlus} className='text-[#52796f] hover:text-[#84a98c]'/>
+               <FontAwesomeIcon icon={faPlus} size='xl' className='text-[#52796f] hover:text-[#84a98c]'/>
             </Button>
             <Dialog open={open} onClose={handleClose} >
                <DialogTitle>Update your {sectionTitle} </DialogTitle>

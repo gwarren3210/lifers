@@ -23,14 +23,10 @@ export async function getCardsBySection(user, section) {
       console.error("Error getting cards from", section,":",error);
       return null;
    }
-   console.log("getCardBySection data:", data);
    return data;   
 }
 
 export async function appendCard(user, cardData, section) {
-   console.log("appendCard cardData:", cardData);
-   console.log("appendCard user:", user);
-   console.log("appendCard section:", section);
    const { error } = await supabase.rpc('append_entry', {
       column_name: section,
       new_data: JSON.stringify(cardData),
@@ -43,54 +39,15 @@ export async function appendCard(user, cardData, section) {
    return getCardsBySection(user, section);
 }
 
-export async function createCard(section, cardData) {
-   console.log("createCard section:", section);
-   console.log("createCard cardData:", cardData);
-   // special card
-   if (['education', 'experience', 'residence'].includes(section)) {
-      try {
-         const { data, error } = await supabase.from(section).upsert([cardData]);
-         console.log("createCard data:", data);
-         console.log("createCard error:", error);
-         if (!error) return data;
-      } catch (error) {
-         console.error("Error creating card:", error.message);
-         return null;
-      }
-   }
-
-   // generic card
-   /* const { data, error } = await supabase.from("cards").insert([card]);
-   if (error) {
-      console.error("Error creating card:", error);
-      return null;
-   }
-   console.log("createCard data:", data);
-   return data; */
-}
-
-/* export async function updateCard(card) {
-   const { data, error } = await supabase
-      .from("cards")
-      .update(card)
-      .match({ id: card.id });
-   if (error) {
-      console.error("Error updating card:", error);
-      return null;
-   }
-   console.log("updateCard data:", data);
-   return data;
-} */
-
-/* export async function deleteCard(card) {
-   const { data, error } = await supabase
-      .from("cards")
-      .delete()
-      .match({ id: card.id });
+export async function deleteCards(user, section, cards, cardIds) {
+   const filteredCards = cards.filter(( _, i) => !cardIds.includes(i));
+   const { error } = await supabase
+      .from('profiles')
+      .update({ [`${section}`]: filteredCards})
+      .eq('id', user.id)
    if (error) {
       console.error("Error deleting card:", error);
-      return null;
+      return false;
    }
-   console.log("deleteCard data:", data);
-   return data;
-} */
+   return getCardsBySection(user, section);
+}

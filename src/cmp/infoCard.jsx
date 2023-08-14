@@ -1,9 +1,27 @@
 import InfoCardDiaolog from "./infoCardDialog";
+import InfoCardEditDialog from "./infoCardEditDialog";
 
 const infoCard = ({ user, sectionTitle, section, cards, setSectionCards}) => {
    return (
       <div className='m-4 bg-white rounded-lg overflow-hidden pt-2 shadow-lg'>
-         <p className='text-xl font-bold text-left px-4 mb-4'>{sectionTitle}</p>
+         <div className='flex justify-between px-4 mb-4'>
+            <p className='text-xl font-bold text-left'>{sectionTitle}</p>
+            <div className='flex flex-row mx-2'>
+               <InfoCardDiaolog
+                  user={user}
+                  sectionTitle={sectionTitle}
+                  section={section}
+                  setSectionCards={setSectionCards}
+               />
+               <InfoCardEditDialog
+                  user={user}
+                  sectionTitle={sectionTitle}
+                  section={section}
+                  setSectionCards={setSectionCards}
+                  cards={cards}
+               />
+            </div>
+         </div>
          {cards && cards.map((card, key) => (
             <div key={key}>
                {key !== 0 && <div className="flex justify-center">
@@ -22,12 +40,7 @@ const infoCard = ({ user, sectionTitle, section, cards, setSectionCards}) => {
             </div>
          ))}
          <div className='flex flex-row items-center justify-center bg-gray-100'>
-            <InfoCardDiaolog
-               user={user}
-               sectionTitle={sectionTitle}
-               section={section}
-               setSectionCards={setSectionCards}
-            />
+            
          </div>
       </div>
    );
