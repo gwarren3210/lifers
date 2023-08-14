@@ -14,7 +14,7 @@ import { appendCard } from '@/server/infoCards';
 import MenuItem from '@mui/material/MenuItem';
 
 export default function InfoCardDialog(props) {
-   const { user, sectionTitle, section } = props;
+   const { user, sectionTitle, section, setSectionCards } = props;
    const [open, setOpen] = useState(false);
    const [isCreating, setIsCreating] = useState(false);
    const [title, setTitle] = useState('');
@@ -51,6 +51,10 @@ export default function InfoCardDialog(props) {
       };
       console.log("Card data: ", cardData);
       const res = await appendCard(user, cardData, section);
+      if (res) {
+         console.log("Card created!", res[0]);
+         setSectionCards(section, res[0]);
+      }
       setIsCreating(false);
       handleClose();
    };

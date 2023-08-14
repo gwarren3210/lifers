@@ -27,6 +27,9 @@ export default function Profile({ session }) {
    const [isProfile, setIsProfile] = useState(true)
    const [groups, setGroups] = useState(null)
    const [cards, setCards] = useState(null)
+   const [educationCards, setEducationCards] = useState(null)
+   const [experienceCards, setExperienceCards] = useState(null)
+   const [residenceCards, setResidenceCards] = useState(null)
 
    useEffect(() => {
       const getData = async () => {      
@@ -48,6 +51,9 @@ export default function Profile({ session }) {
          const data = await getCards(user);
          if (data) {
             setCards(data)
+            setEducationCards(data.education)
+            setExperienceCards(data.experience)
+            setResidenceCards(data.residence)
          }
          setCardsLoading(false)
       }
@@ -76,6 +82,23 @@ export default function Profile({ session }) {
       setLoading(false)
       console.log('handleViewGroups')
    }
+
+   const setSectionCards = (section, data) => {
+      switch (section) {
+         case "education":
+            setEducationCards(data.education);
+            break;
+         case "experience":
+            setExperienceCards(data.experience);
+            break;
+         case "residence":
+            setResidenceCards(data.residence);
+            break;
+         default:
+            break;
+      }
+   }
+
    return (
       <div className=''>
          <Navbar key='profile'/>
@@ -131,19 +154,22 @@ export default function Profile({ session }) {
                            user={user}
                            sectionTitle={"Education"}
                            section={"education"}
-                           cards={cards.education}
+                           cards={educationCards}
+                           setSectionCards={setSectionCards}
                         />
                         <InfoCard
                            user={user}
                            sectionTitle={"Experience"}
                            section={"experience"}
-                           cards={cards.experience}
+                           cards={experienceCards}
+                           setSectionCards={setSectionCards}
                         />
                         <InfoCard
                            user={user}
                            sectionTitle={"Residence"}
                            section={"residence"}
-                           cards={cards.residence}
+                           cards={residenceCards}
+                           setSectionCards={setSectionCards}
                         />
                         {/* <InfoCard section={"Custom"} cards={cards.cards} /> */}
                      </div>

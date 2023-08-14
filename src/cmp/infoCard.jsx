@@ -1,6 +1,6 @@
 import InfoCardDiaolog from "./infoCardDialog";
 
-const infoCard = ({ user, sectionTitle, section, cards }) => {
+const infoCard = ({ user, sectionTitle, section, cards, setSectionCards}) => {
    return (
       <div className='m-4 bg-white rounded-lg overflow-hidden pt-2 shadow-lg'>
          <p className='text-xl font-bold text-left px-4 mb-4'>{sectionTitle}</p>
@@ -22,7 +22,12 @@ const infoCard = ({ user, sectionTitle, section, cards }) => {
             </div>
          ))}
          <div className='flex flex-row items-center justify-center bg-gray-100'>
-            <InfoCardDiaolog user={user} sectionTitle={sectionTitle} section={section} />
+            <InfoCardDiaolog
+               user={user}
+               sectionTitle={sectionTitle}
+               section={section}
+               setSectionCards={setSectionCards}
+            />
          </div>
       </div>
    );
