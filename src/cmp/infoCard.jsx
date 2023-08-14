@@ -1,9 +1,9 @@
 import InfoCardDiaolog from "./infoCardDialog";
 
-const infoCard = ({ user, section, cards, append }) => {
+const infoCard = ({ user, sectionTitle, section, cards }) => {
    return (
       <div className='m-4 bg-white rounded-lg overflow-hidden pt-2 shadow-lg'>
-         <p className='text-xl font-bold text-left px-4 mb-4'>{section}</p>
+         <p className='text-xl font-bold text-left px-4 mb-4'>{sectionTitle}</p>
          {cards && cards.map((card, key) => (
             <div key={key}>
                {key !== 0 && <div className="flex justify-center">
@@ -22,7 +22,7 @@ const infoCard = ({ user, section, cards, append }) => {
             </div>
          ))}
          <div className='flex flex-row items-center justify-center bg-gray-100'>
-            <InfoCardDiaolog user={user} section={section} append={append} />
+            <InfoCardDiaolog user={user} sectionTitle={sectionTitle} section={section} />
          </div>
       </div>
    );

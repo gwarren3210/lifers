@@ -10,11 +10,11 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { createCard } from '@/server/infoCards';
+import { appendCard } from '@/server/infoCards';
 import MenuItem from '@mui/material/MenuItem';
 
 export default function InfoCardDialog(props) {
-   const { section, append, user } = props;
+   const { user, sectionTitle, section } = props;
    const [open, setOpen] = useState(false);
    const [isCreating, setIsCreating] = useState(false);
    const [title, setTitle] = useState('');
@@ -50,7 +50,7 @@ export default function InfoCardDialog(props) {
          endDate: new Date(endYear, endMonth - 1, 1), // Set the date to the first day of the selected month
       };
       console.log("Card data: ", cardData);
-      const res = await append(user, cardData);
+      const res = await appendCard(user, cardData, section);
       setIsCreating(false);
       handleClose();
    };
@@ -66,7 +66,7 @@ export default function InfoCardDialog(props) {
                <FontAwesomeIcon icon={faPlus} className='text-[#52796f] hover:text-[#84a98c]'/>
             </Button>
             <Dialog open={open} onClose={handleClose} >
-               <DialogTitle>Update your {section} </DialogTitle>
+               <DialogTitle>Update your {sectionTitle} </DialogTitle>
                <DialogContent>
                   <TextField
                      value={title}

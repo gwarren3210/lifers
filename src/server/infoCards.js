@@ -27,11 +27,12 @@ export async function getCardsBySection(user, section) {
    return data;   
 }
 
-export async function appendEducationCard(user, cardData) {
-   console.log("appendEducationCard cardData:", cardData);
-   console.log("appendEducationCard user:", user);
-   let { data, error } = await supabase.rpc('append_entry', {
-      column_name: 'education',
+export async function appendCard(user, cardData, section) {
+   console.log("appendCard cardData:", cardData);
+   console.log("appendCard user:", user);
+   console.log("appendCard section:", section);
+   const { error } = await supabase.rpc('append_entry', {
+      column_name: section,
       new_data: JSON.stringify(cardData),
       profile_id: user.id
    })
@@ -39,7 +40,7 @@ export async function appendEducationCard(user, cardData) {
       console.error("Error creating card:", error);
       return false;
    }
-   return getCardsBySection(user, 'education');
+   return getCardsBySection(user, section);
 }
 
 export async function createCard(section, cardData) {

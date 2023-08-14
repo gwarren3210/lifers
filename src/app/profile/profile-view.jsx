@@ -52,7 +52,6 @@ export default function Profile({ session }) {
          setCardsLoading(false)
       }
       getCardsData()
-      console.log("info cards: ", cards);
    }, [user])
 
    const handleUpdate = async (username, firstName, lastName) => {
@@ -128,10 +127,25 @@ export default function Profile({ session }) {
                   {cardsLoading
                      ? <InfoCard section={"Loading"} title={"Loading"} subtitle={"Loading"} dates={"Loading"}/>
                      : <div> 
-                        <InfoCard user={user} section={"Education"} cards={cards.education} append={appendEducationCard} />
-                        <InfoCard section={"Experience"} cards={cards.experience} />
-                        <InfoCard section={"Residence"} cards={cards.residence} />
-                        <InfoCard section={"Custom"} cards={cards.cards} />
+                        <InfoCard 
+                           user={user}
+                           sectionTitle={"Education"}
+                           section={"education"}
+                           cards={cards.education}
+                        />
+                        <InfoCard
+                           user={user}
+                           sectionTitle={"Experience"}
+                           section={"experience"}
+                           cards={cards.experience}
+                        />
+                        <InfoCard
+                           user={user}
+                           sectionTitle={"Residence"}
+                           section={"residence"}
+                           cards={cards.residence}
+                        />
+                        {/* <InfoCard section={"Custom"} cards={cards.cards} /> */}
                      </div>
                   }
                   <div className='flex flex-row justify-center m-4 bg-white rounded-lg overflow-hidden py-2 shadow-lg'>
