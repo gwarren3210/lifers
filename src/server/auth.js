@@ -1,35 +1,32 @@
+import supabase from '../../supabase';
+
 export async function login(email, password){
-   try {
-      const { user, error } = await supabase.auth.signInWithPassword({ email, password });
-      if (error) throw error
-      return user;
-   } catch (error) {
+   const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+   if (error){ 
       alert('Error logging in user!')
       console.error('Error logging in user:', error.message);
       return null;
    }
+   console.log("Login data:", data);
+   return data.user;
 }
 
 export async function signup(email, password){
-   try {
-      const { user, error } = await supabase.auth.signUp({ email, password });
-      if (error) throw error
-      console.log('createUser user: ', user);
-      return user;
-   } catch (error) {
+   const { data, error } = await supabase.auth.signUp({ email, password });
+   if (error){
       alert('Error signing up user!')
       console.error('Error signing up user:', error.message);
       return null;
    }
+   console.log("Signup data:",data);
+   return data;
 }
 
 /*
 export async function logout(){
-   try {
-      const { error } = await supabase.auth.signOut();
-      if (error) throw error
-   } catch (error) {
-      alert('Error logging out user!')
+   const { error } = await supabase.auth.signOut();
+   if (error) {
+      alert('Error logging out user!', error.message)
       console.error('Error logging out user:', error.message);
    }
 }

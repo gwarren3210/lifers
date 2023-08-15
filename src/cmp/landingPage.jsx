@@ -4,6 +4,7 @@ import {TextField, Button } from '@mui/material';
 import supabase from '../../supabase';
 import AuthForm from '@/cmp/auth-form';
 import { login, signup } from '@/server/auth';
+import { Paper } from '@mui/material';
 
 export default function LandingPage() {
    const [email, setEmail] = useState('');
@@ -56,7 +57,9 @@ export default function LandingPage() {
          return;
       }
       const user = await login(email, password)
-      if (user) setSignedIn(true)
+      if (user){
+         router.push('/profile')
+      }
       else alert('Error logging in user');
       return user;
    };
@@ -80,55 +83,59 @@ export default function LandingPage() {
          <h1 className='text-4xl text-center font-bold'>Welcome to Lifers</h1>
          <h2 className='text-2xl text-center font-bold'>A place to connect with your fellow alumni</h2>
          <AuthForm />
-         {!signedIn && <div className='flex flex-col justify-center gap-7 my-8'>
-            <TextField 
-               autoFocus
-               margin="dense"
-               id="name"
-               label="Email"
-               type="email"
-               variant="standard"
-               fullWidth
-               required
-               onChange={handleEmailChange}
-               error={emailError}
-            />
-            <TextField 
-               autoFocus
-               margin="dense"
-               id="name"
-               label="Password"
-               variant="standard"
-               type="password"
-               fullWidth
-               required
-               onChange={handlePasswordChange}
-               error={passwordError}
-            />
-               <Button 
-                  className='rounded-full px-3 py-2 mt-5'
-                  onClick={loggingIn ? loginUser: createUser}
-                  disabled={loading}
-                  variant='outlined'
-               >
-                  {loggingIn ? "Log in" : "Get started"}
-               </Button>
-               <div className=''>
-                  {loggingIn &&
-                     <p className='text-center'>
-                        <button className='text-[#52796f] hover:text-[#84a98c] text-center' onClick={handlePasswordReset} >
-                           Forgot password?
-                        </button>
-                     </p>
-                  }  
-                  <p className='text-center'>
-                     {!loggingIn? "Already" : "Don't"} have an account?&nbsp;
-                     <button className='text-[#52796f] hover:text-[#84a98c]' onClick={() => setLoggingIn(!loggingIn)} >
-                        {!loggingIn ? "Log in" : "Sign up"}
-                     </button>
-                  </p>
+         {/* !signedIn && */
+            <Paper className='px-8 py-1 rounded-2xl' elevation={3}>
+               <div className='flex flex-col justify-center gap-7 my-8'>
+                  <TextField 
+                     autoFocus
+                     margin="dense"
+                     id="name"
+                     label="Email"
+                     type="email"
+                     variant="standard"
+                     fullWidth
+                     required
+                     onChange={handleEmailChange}
+                     error={emailError}
+                  />
+                  <TextField 
+                     autoFocus
+                     margin="dense"
+                     id="name"
+                     label="Password"
+                     variant="standard"
+                     type="password"
+                     fullWidth
+                     required
+                     onChange={handlePasswordChange}
+                     error={passwordError}
+                  />
+                     <Button 
+                        className='rounded-full px-3 py-2 mt-5'
+                        onClick={loggingIn ? loginUser: createUser}
+                        disabled={loading}
+                        variant='outlined'
+                     >
+                        {loggingIn ? "Log in" : "Get started"}
+                     </Button>
+                     <div className=''>
+                        {loggingIn &&
+                           <p className='text-center'>
+                              <button className='text-[#52796f] hover:text-[#84a98c] text-center' onClick={handlePasswordReset} >
+                                 Forgot password?
+                              </button>
+                           </p>
+                        }  
+                        <p className='text-center'>
+                           {!loggingIn? "Already" : "Don't"} have an account?&nbsp;
+                           <button className='text-[#52796f] hover:text-[#84a98c]' onClick={() => setLoggingIn(!loggingIn)} >
+                              {!loggingIn ? "Log in" : "Sign up"}
+                           </button>
+                        </p>
+                     </div>
                </div>
-         </div>}
+            </Paper>
+         }
       </div>
    );
 };

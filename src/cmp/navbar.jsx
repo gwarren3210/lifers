@@ -10,7 +10,7 @@ export default function Navbar() {
    return (
       <nav className='bg-white z-10 w-full flex md:justify-center justify-between items-center p-4 shadow-lg fixed top-0 '>
          <div className='md:flex-[0.5] flex-initial justify-center items-center'>
-            <img src={'logo'} alt='logo' className='w-32 cursor-pointer' />
+            <img src='/nav-logo.png' alt='logo' className='w-32 cursor-pointer' />
          </div>
          <ul className='text-black md:flex hidden list-none flex-row justify-between items-center flex-initial'>
             {['Home', 'Nav2', 'Nav3', 'Nav4'].map((item, index) => (
