@@ -13,12 +13,18 @@ import { updateProfile, getProfile } from '@/server/profile.js';
 import { getGroups } from '@/server/groups.js'
 import { getCards, appendEducationCard } from '@/server/infoCards'
 import { useRouter } from 'next/navigation'
+import supabase from '../../../supabase';
+import { getUser } from '@/server/auth';
+import { setStorage } from '@/server/localStorage';
 
-export default function Profile({ session }) {
-   const supabase = createClientComponentClient()
-   const user = session?.user
+
+export default function Profile({ session/*, user */ }) {
+   /* console.log('profile-view user', user)
+   console.log('profile-view user id ', user?.id)
+   console.log('profile-view session', session)
+
    const router = useRouter()
-   if (!user) router.push('/')
+   if (!user?.id) alert(`You must be logged in to view this page, user: ${user}`) */
    const [loading, setLoading] = useState(true)
    const [cardsLoading, setCardsLoading] = useState(true)
    const [firstName, setFirstName] = useState(null)
@@ -30,11 +36,32 @@ export default function Profile({ session }) {
    const [educationCards, setEducationCards] = useState(null)
    const [experienceCards, setExperienceCards] = useState(null)
    const [residenceCards, setResidenceCards] = useState(null)
+   const [_user, setUser] = useState(null)
 
    useEffect(() => {
-      const getData = async () => {      
+      const getAuthUser = async () => {
+         const sessionUser = await getUser();
+         if (sessionUser) {
+            setStorage('user', sessionUser);
+            setUser(sessionUser);
+            return;
+         }
+         const storedUser = localStorage.getItem('user');
+         if (!storedUser) {
+            alert('You must be logged in to view this page')
+            return;
+            //router.push('/')
+         }
+         setUser(JSON.parse(sessionUser));
+      }
+      getAuthUser();
+   }, [])
+
+   useEffect(() => {
+      const getProfileData = async () => {      
          setLoading(true)
-         const data = await getProfile(user);
+         const data = await getProfile(_user);
+         console.log('profile data', data)
          if (data) {
             setFirstName(data.first_name)
             setLastName(data.last_name)
@@ -42,13 +69,13 @@ export default function Profile({ session }) {
          }
          setLoading(false)
       }
-      getData()
-   }, [user])
+      if (_user) getProfileData()
+   }, [_user])
 
    useEffect(() => {
       const getCardsData = async () => {      
          setCardsLoading(true)
-         const data = await getCards(user);
+         const data = await getCards(_user);
          if (data) {
             setCards(data)
             setEducationCards(data.education)
@@ -57,12 +84,24 @@ export default function Profile({ session }) {
          }
          setCardsLoading(false)
       }
-      getCardsData()
-   }, [user])
+      if (_user) getCardsData()
+   }, [_user])
+
+   useEffect(() => {
+      supabase.auth.onAuthStateChange( async (event, session) => {
+         console.log('onAuthStateChange profile session', session)
+         if (session?.user){
+            const res = await setUser(session.user);
+            console.log('onAuthStateChange profile res', res)
+            console.log('user logged in profile ', session.user)
+            //router.push('/profile')
+         }
+      })
+   }, [])
 
    const handleUpdate = async (username, firstName, lastName) => {
       setLoading(true)
-      const res = await updateProfile(user, username, firstName, lastName);
+      const res = await updateProfile(_user, username, firstName, lastName);
       if (res) {
          setFirstName(firstName)
          setLastName(lastName)
@@ -73,7 +112,7 @@ export default function Profile({ session }) {
 
    const handleViewGroups = async () => {
       setLoading(true)
-      const data = await getGroups(user)    
+      const data = await getGroups(_user)    
       if (data) {
          console.log('data', data)
          setIsProfile(false);
@@ -151,21 +190,21 @@ export default function Profile({ session }) {
                      ? <InfoCard section={"Loading"} title={"Loading"} subtitle={"Loading"} dates={"Loading"}/>
                      : <div> 
                         <InfoCard 
-                           user={user}
+                           user={_user}
                            sectionTitle={"Education"}
                            section={"education"}
                            cards={educationCards}
                            setSectionCards={setSectionCards}
                         />
                         <InfoCard
-                           user={user}
+                           user={_user}
                            sectionTitle={"Experience"}
                            section={"experience"}
                            cards={experienceCards}
                            setSectionCards={setSectionCards}
                         />
                         <InfoCard
-                           user={user}
+                           user={_user}
                            sectionTitle={"Residence"}
                            section={"residence"}
                            cards={residenceCards}
@@ -184,7 +223,7 @@ export default function Profile({ session }) {
                   </div>
                :  <Liferss 
                      groups={groups}
-                     user={user}
+                     user={_user}
                      supabase={supabase}
                      loading={loading}
                      setLoading={setLoading}

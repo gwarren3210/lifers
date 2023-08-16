@@ -1,5 +1,29 @@
 import supabase from '../../supabase';
 
+let user = null;
+
+export async function getUser(){
+   console.log("Getting auth user from auth: ", user);
+   if (user) return user;
+   console.log("No user found, checking session...");
+   /* const session = supabase.auth.session();
+   console.log("Session: ", session);
+   if (session?.user?.id) {
+      console.log("Session user found: ", session.user);
+      user = session.user;
+      console.log("User set to: ", user);
+      return session.user;
+   } */
+   return null;
+}
+
+export async function setUser(_user){
+   console.log("Setting auth user: ", _user);
+   user = _user;
+   console.log("User set to: ", user);
+   return user;
+}
+
 export async function login(email, password){
    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
    if (error){ 
@@ -8,18 +32,20 @@ export async function login(email, password){
       return null;
    }
    console.log("Login data:", data);
+   if (data.user) user = data.user;
    return data.user;
 }
 
 export async function signup(email, password){
    const { data, error } = await supabase.auth.signUp({ email, password });
    if (error){
-      alert('Error signing up user!')
+      alert('Error signing up user!', error.message)
       console.error('Error signing up user:', error.message);
       return null;
    }
    console.log("Signup data:",data);
-   return data;
+   if (data.user) user = data.user;
+   return data.user;
 }
 
 /*
@@ -30,43 +56,4 @@ export async function logout(){
       console.error('Error logging out user:', error.message);
    }
 }
-
-export async function resetPassword(email){
-   try {
-      const { error } = await supabase.auth.api.resetPasswordForEmail(email);
-      if (error) throw error
-   } catch (error) {
-      alert('Error resetting password!')
-      console.error('Error resetting password:', error.message);
-   }
-}
-
-export async function updatePassword(email, password){
-   try {
-      const { error } = await supabase.auth.update({ email, password });
-      if (error) throw error
-   } catch (error) {
-      alert('Error updating password!')
-      console.error('Error updating password:', error.message);
-   }
-}
-
-export async function updateEmail(email){
-   try {
-      const { error } = await supabase.auth.update({ email });
-      if (error) throw error
-   } catch (error) {
-      alert('Error updating email!')
-      console.error('Error updating email:', error.message);
-   }
-}
-
-export async function deleteAccount(){
-   try {
-      const { error } = await supabase.auth.delete();
-      if (error) throw error
-   } catch (error) {
-      alert('Error deleting account!')
-      console.error('Error deleting account:', error.message);
-   }
-} */
+*/
